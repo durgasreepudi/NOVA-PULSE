@@ -1,0 +1,1810 @@
+# NOVA CART — PROMPTWARS BUSINESS RESCUE CHALLENGE
+
+## MASTER BUILD PROMPT FOR REPLIT AGENT
+
+You are the lead full-stack engineer, product designer, business analyst, AI product strategist, and QA engineer for this project.
+
+Your job is NOT to merely generate source code.
+
+Your job is to build a **fully functional, polished, demo-ready web application inside Replit** for the official PROMPTWARS — BUSINESS RESCUE CHALLENGE.
+
+The final result must be something that can be opened, tested, demonstrated to judges, and explained as a complete business solution.
+
+---
+
+# 1. OFFICIAL CHALLENGE SOURCE OF TRUTH
+
+The uploaded official NOVA CART challenge document is the primary source of truth.
+
+Read and understand the entire document before building.
+
+Do not replace its facts with invented data.
+
+The challenge asks the team to:
+
+DISCOVER → PROMPT → VALIDATE → DESIGN → BUILD → PROVE
+
+The final prototype must demonstrate:
+
+1. Who uses the product
+2. What they do
+3. What the system does
+4. Why the solution matters to NOVA CART
+5. Functional product behaviour
+6. Business impact
+
+A beautiful static website is NOT sufficient.
+
+A generic AI-generated dashboard is NOT sufficient.
+
+The product must solve a specific business problem identified from the evidence.
+
+---
+
+# 2. NOVA CART BUSINESS CONTEXT
+
+NOVA CART connects customers with 620 local grocery stores, pharmacies, bakeries, stationery stores and other retailers across three Indian cities.
+
+Current business snapshot:
+
+- Registered users: 1,20,000
+- Monthly active users: 46,000
+- Monthly orders: 38,500
+- Average order value: ₹486
+- Monthly revenue: ₹26.1 lakh
+
+Six-month movement:
+
+- Registered users: 82k → 120k
+- MAU: 39k → 46k
+- Monthly orders: 31,200 → 38,500
+- AOV: ₹452 → ₹486
+- Repeat purchase: 41% → 27%
+- Delivery time: 29 → 37 minutes
+- Cancellation rate: 6% → 11%
+- Support tickets: 3,100 → 5,900/month
+- Promo spend: ₹9.5L → ₹17L/month
+- Revenue: ₹21.8L → ₹26.1L/month
+
+Customer signals:
+
+- 38% say prices/fees are high
+- 34% say delivery is too long
+- 29% say products shown available become unavailable after ordering
+- 24% find discounts confusing
+- 21% prefer nearby stores directly
+- 18% struggle to discover local products
+- 16% report refund problems
+- 14% find the app cluttered
+- 11% report inaccurate tracking
+
+61% of customers who stopped ordering had previously rated NOVA CART 4+ stars.
+
+Customer behaviour:
+
+- 54% first-order completion
+- Only 31% of first-time customers place a second order within 30 days
+- Customers reaching 3 orders have a 72% probability of ordering again next month
+- Discount-acquired users have lower long-term retention than organic users
+- 44% of coupons are never redeemed
+- 19% repeatedly search unavailable products
+- Multi-category shoppers have higher repeat usage
+
+Operations:
+
+- 11% orders cancelled
+- 13% are more than 15 minutes late
+- 8% involve substitutions
+- 6% involve refunds/support
+- 35% of cancellations are because products are unavailable
+- 27% because of delays
+- 18% store rejection
+- 12% delivery partner unavailable
+- 8% other
+
+Inventory maintenance:
+
+- Many stores manually maintain inventory
+- Some update several times daily
+- Others update only once every 1–3 days
+
+Partner signals:
+
+- 46% value the additional customers
+- 39% say inventory maintenance is too much effort
+- 31% say promotions reduce margins
+- 28% struggle to predict online demand
+- 23% reject orders during busy periods
+- 18% are considering leaving next year
+
+Marketing:
+
+- ₹17L/month spend
+- 58% acquisition-focused
+- Management is considering increasing spend by 30%
+
+Support:
+
+- 5,900 tickets/month
+- 29% refund status
+- 24% delayed delivery
+- 19% missing/unavailable
+- 13% coupon
+- 9% incorrect
+- 6% other
+- Average resolution time: 9.2 hours
+
+Competition includes:
+
+- Large quick-commerce platforms
+- Food delivery platforms
+- Supermarket delivery
+- Local direct ordering
+
+Potential differentiation:
+
+Hundreds of independent local stores offer products that are not always available on larger platforms.
+
+Budget constraint:
+
+Maximum additional implementation budget:
+₹25 lakh over six months.
+
+Do NOT propose:
+- Massive physical infrastructure
+- Hundreds of employees
+- Unsustainable discounting
+- Warehouses as the main solution
+
+Existing technology:
+
+- Customer mobile app
+- Basic website
+- Partner dashboard
+- Order database
+- Customer database
+- Delivery tracking
+- Payment gateway
+- Coupon system
+- Analytics
+
+Existing systems are developed separately and information does not always move efficiently.
+
+---
+
+# 3. BUSINESS DIAGNOSIS
+
+The product must focus on the strongest connected evidence around unreliable product availability.
+
+Use this problem chain:
+
+STALE INVENTORY
+↓
+UNRELIABLE AVAILABILITY
+↓
+FAILED ORDER / SUBSTITUTION / CANCELLATION
+↓
+CUSTOMER FRUSTRATION
+↓
+SUPPORT LOAD
+↓
+LOWER REPEAT PURCHASE
+
+Key evidence:
+
+- 35% of cancellations are caused by unavailable products
+- 29% of customers report products becoming unavailable after ordering
+- 39% of stores say inventory maintenance is too much effort
+- 19% of customers repeatedly search unavailable products
+
+Therefore define the root opportunity as:
+
+"Make local-store inventory more trustworthy without creating excessive operational work for store partners."
+
+Do not claim that this is the only possible interpretation.
+
+Present it as the evidence-backed opportunity selected for this prototype.
+
+---
+
+# 4. PRODUCT
+
+Build:
+
+# NOVA PULSE
+
+Tagline:
+
+"Smarter local inventory. Better shopping. Fewer failed orders."
+
+NOVA PULSE is an inventory intelligence and availability-confidence layer connecting:
+
+Customer
+↕
+NOVA CART
+↕
+Store Partner
+↕
+Operations
+
+Core flow:
+
+INVENTORY SIGNALS
+→
+AVAILABILITY CONFIDENCE
+→
+BETTER PRODUCT DISCOVERY
+→
+SMART ALTERNATIVES
+→
+STORE ACTION
+→
+FEWER FAILED ORDERS
+→
+BETTER CUSTOMER EXPERIENCE
+
+---
+
+# 5. THREE USER ROLES
+
+Implement real role-based access.
+
+## Customer
+
+Purpose:
+
+Shop with more confidence.
+
+Customer can:
+
+- Search products
+- View nearby products
+- See availability confidence
+- View product details
+- Add products to cart
+- See alternative products
+- Check order risk
+- Accept alternatives
+- Place order
+- Track order
+- View order history
+
+---
+
+## Store Partner
+
+Purpose:
+
+Keep inventory information reliable with minimum effort.
+
+Store can:
+
+- View dashboard
+- View inventory
+- Search inventory
+- Update stock
+- Mark products unavailable
+- Mark products available
+- View low-confidence products
+- View operational alerts
+- View orders
+- Update order status
+- View demand signals
+
+---
+
+## Operations Admin
+
+Purpose:
+
+Monitor the NOVA CART network and intervene where necessary.
+
+Admin can:
+
+- View business dashboard
+- View store network
+- View inventory risks
+- View high-risk products
+- View orders
+- View operational alerts
+- View demand signals
+- View unavailable-product searches
+- View store reliability
+- View scenario impact
+- View business diagnosis
+- View evidence
+- Run demo
+
+---
+
+# 6. TECHNOLOGY STACK
+
+Use:
+
+## Frontend
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+- Axios
+- Recharts
+- Lucide React
+
+## Backend
+
+Prefer:
+
+- Python
+- FastAPI
+- SQLAlchemy
+- Pydantic
+- JWT authentication
+
+## Database
+
+Prefer:
+
+- PostgreSQL
+
+If PostgreSQL setup becomes unreliable inside Replit:
+
+Use:
+
+- SQLite
+
+The application must still work fully.
+
+Do not leave database integration as a placeholder.
+
+---
+
+# 7. PROJECT ARCHITECTURE
+
+Use a clean structure similar to:
+
+/frontend
+  /src
+    /components
+    /pages
+    /layouts
+    /services
+    /hooks
+    /utils
+    /types
+    /data
+
+/backend
+  /app
+    /api
+    /models
+    /schemas
+    /services
+    /auth
+    /database
+    /utils
+
+/tests
+
+README.md
+
+.replit
+
+Use environment variables for secrets.
+
+Never hardcode secret API keys.
+
+---
+
+# 8. UI/UX — CRITICAL REQUIREMENT
+
+The final application must look like a polished, competition-ready product.
+
+Do NOT build a plain CRUD dashboard.
+
+Do NOT use a generic admin template without customization.
+
+Do NOT make every page look identical.
+
+The product must feel like one coherent NOVA CART ecosystem.
+
+Design style:
+
+- Modern
+- Premium
+- Clean
+- Professional
+- Mobile-first
+- Quick-commerce inspired
+- SaaS-quality dashboards for operational users
+
+Use:
+
+- Strong visual hierarchy
+- Consistent typography
+- Rounded cards
+- Subtle shadows
+- Clean spacing
+- Professional icons
+- Status badges
+- Charts
+- Empty states
+- Loading states
+- Error states
+- Toast notifications
+- Hover states
+- Responsive layouts
+
+Create a consistent design system for:
+
+- Buttons
+- Cards
+- Forms
+- Tables
+- Badges
+- Navigation
+- Modals
+- Alerts
+- Charts
+- Product cards
+
+---
+
+# 9. CUSTOMER UI
+
+Create a real shopping experience.
+
+## Home
+
+Include:
+
+- NOVA CART branding
+- Search bar
+- Categories
+- Nearby stores
+- Recommended products
+- Available Near You
+- Availability confidence
+- Delivery estimate
+- Product cards
+
+Product card should show:
+
+Product
+Price
+Store
+Availability confidence
+Delivery estimate
+
+---
+
+# 10. AVAILABILITY CONFIDENCE
+
+Every important product must have a confidence score.
+
+Range:
+
+0–100.
+
+Categories:
+
+90–100:
+Highly Available
+
+75–89:
+Likely Available
+
+50–74:
+Uncertain
+
+0–49:
+Low Availability
+
+Calculate confidence using real backend logic involving factors such as:
+
+- Current stock
+- Inventory freshness
+- Historical availability
+- Store reliability
+- Recent failures/fulfillment
+
+Do NOT simply hardcode the displayed value.
+
+Seed demo data can create the required starting values.
+
+---
+
+# 11. PRODUCT DETAILS
+
+Product detail page must show:
+
+- Product image
+- Name
+- Price
+- Store
+- Availability confidence
+- Status
+- Last inventory update
+- Delivery estimate
+- Add to cart
+
+If confidence is low:
+
+Show:
+
+"Availability is uncertain"
+
+Then show:
+
+"Try these alternatives"
+
+---
+
+# 12. SMART ALTERNATIVES
+
+Implement real recommendation logic.
+
+Recommendation factors:
+
+- Same category
+- Similar product
+- Availability confidence
+- Price similarity
+- Store distance
+- Store reliability
+- Delivery estimate
+
+Example:
+
+Milk
+42%
+Low Availability
+
+Recommended:
+
+Milk Alternative
+94%
+Highly Available
+
+The alternative must come from actual backend data.
+
+Do NOT fake the recommendation in frontend code.
+
+---
+
+# 13. CART
+
+Cart must include:
+
+- Product
+- Quantity
+- Price
+- Store
+- Availability confidence
+- Warning if risky
+- Alternative recommendation
+
+Allow users to:
+
+- Increase quantity
+- Decrease quantity
+- Remove item
+
+---
+
+# 14. CHECKOUT
+
+Checkout should show:
+
+- Address
+- Payment method
+- Order summary
+- Delivery estimate
+- Risk summary
+
+Before final order:
+
+Call:
+
+POST /api/orders/check-risk
+
+Return:
+
+- Risk level
+- Risk score
+- Risk reasons
+- Recommended alternatives
+
+If risk is high:
+
+Show an understandable warning.
+
+Example:
+
+"This order contains an item with uncertain availability."
+
+Allow:
+
+"Replace with recommended alternative"
+
+or
+
+"Continue anyway"
+
+---
+
+# 15. ORDER FLOW
+
+Implement real order creation.
+
+Order states:
+
+PLACED
+→
+STORE CONFIRMED
+→
+PREPARING
+→
+READY
+→
+OUT FOR DELIVERY
+→
+DELIVERED
+
+Also support:
+
+CANCELLED
+REFUND_PENDING
+REFUNDED
+
+Store and admin must see the same order state through backend APIs.
+
+Customer must see updated status.
+
+---
+
+# 16. STORE PARTNER UI
+
+Create a dedicated store dashboard.
+
+Dashboard cards:
+
+- Today's orders
+- Pending orders
+- Low-confidence products
+- Inventory updates needed
+- Recent inventory changes
+- Operational score
+
+Clearly label:
+
+"NOVA Pulse operational score"
+
+This is a prototype metric, NOT an official NOVA CART metric.
+
+---
+
+# 17. STORE INVENTORY
+
+Inventory table:
+
+Product
+Category
+Stock
+Confidence
+Last Updated
+Risk
+Action
+
+Actions:
+
+- Update stock
+- Mark unavailable
+- Mark available
+
+When stock changes:
+
+1. Save to database
+2. Recalculate confidence
+3. Update customer view
+4. Update admin dashboard
+5. Create/resolve relevant alert
+
+This must be a real end-to-end workflow.
+
+---
+
+# 18. STORE ALERTS
+
+Examples:
+
+HIGH RISK
+
+"Milk availability is uncertain."
+
+Reason:
+
+"Inventory has not been updated recently and recent orders have failed."
+
+Action:
+
+"Update inventory"
+
+Other alerts:
+
+- Frequently unavailable product
+- Inventory stale
+- Order risk
+- Repeated cancellation
+- Demand spike
+
+---
+
+# 19. STORE ORDERS
+
+Store should see:
+
+- New
+- Confirmed
+- Preparing
+- Ready
+- Completed
+- Cancelled
+
+Allow status updates.
+
+Customer tracking must reflect them.
+
+---
+
+# 20. ADMIN OPERATIONS CENTER
+
+Create a professional operations dashboard.
+
+Show:
+
+- Monthly orders
+- Revenue
+- AOV
+- Cancellation rate
+- Repeat purchase rate
+- Delivery time
+- Support tickets
+- Inventory risk
+- At-risk orders
+- Stores requiring attention
+
+Use official challenge baseline values where appropriate.
+
+Do not present prototype improvements as actual results.
+
+---
+
+# 21. ADMIN CHARTS
+
+Build real charts using Recharts.
+
+Include:
+
+1. Six-month business performance
+2. Cancellation reasons
+3. Support ticket categories
+4. Customer signals
+5. Availability risk
+6. Store reliability
+7. Repeat purchase trend
+8. Demand signals
+
+Use the official challenge data.
+
+---
+
+# 22. INVENTORY RISK CENTER
+
+Create:
+
+/admin/inventory-risk
+
+Table:
+
+Product
+Store
+Confidence
+Risk
+Last Updated
+Recent Failures
+Action
+
+Filters:
+
+- High risk
+- Uncertain
+- Low confidence
+- Recently failed
+- Frequently searched
+
+Actions:
+
+- View product
+- View store
+- Trigger store alert
+
+---
+
+# 23. DEMAND SIGNALS
+
+Create a demand intelligence page.
+
+Show:
+
+- Frequently searched unavailable products
+- Search frequency
+- Availability rate
+- Store coverage
+- Potential opportunity
+
+Example:
+
+"19% of customers repeatedly search unavailable products."
+
+Use this to explain why search behaviour can become a demand signal.
+
+Do not claim forecast accuracy that has not been measured.
+
+---
+
+# 24. OPERATIONAL ALERTS
+
+Create:
+
+/admin/alerts
+
+Each alert must contain:
+
+- Severity
+- Type
+- Store
+- Product/order
+- Reason
+- Timestamp
+- Recommended action
+- Status
+
+Allow admin to:
+
+- Acknowledge
+- Resolve
+
+Store-side alerts should be generated from relevant backend events.
+
+---
+
+# 25. BUSINESS CASE PAGE
+
+Create:
+
+/business-case
+
+Use polished sections:
+
+1. Business Snapshot
+2. Six-Month Performance
+3. Customer Signals
+4. Customer Behaviour
+5. Operations
+6. Partner Signals
+7. Marketing
+8. Support
+9. Competition
+10. Constraints
+11. Existing Technology
+12. Management Perspectives
+
+Use:
+
+- Metric cards
+- Charts
+- Evidence callouts
+- Tables
+- Insight blocks
+
+Do not distort official numbers.
+
+---
+
+# 26. DIAGNOSIS PAGE
+
+Create:
+
+/diagnosis
+
+Visually show:
+
+STALE INVENTORY
+↓
+UNRELIABLE AVAILABILITY
+↓
+FAILED ORDER
+↓
+CUSTOMER FRUSTRATION
+↓
+SUPPORT LOAD
+↓
+LOWER REPEAT PURCHASE
+
+Then show:
+
+ROOT OPPORTUNITY
+
+"Make local-store inventory more trustworthy without creating excessive operational work for store partners."
+
+Include the evidence supporting this diagnosis.
+
+---
+
+# 27. NOVA PULSE OVERVIEW
+
+Create:
+
+/nova-pulse
+
+This should be the strongest product explanation page.
+
+Show:
+
+INVENTORY SIGNALS
+↓
+AVAILABILITY CONFIDENCE
+↓
+SMART ALTERNATIVES
+↓
+STORE ACTION
+↓
+BETTER FULFILLMENT
+↓
+BETTER CUSTOMER EXPERIENCE
+
+Explain what happens for:
+
+Customer
+Store Partner
+Operations
+
+Use illustrations/cards/flows rather than a wall of text.
+
+---
+
+# 28. BUSINESS IMPACT SIMULATOR
+
+Create:
+
+/impact
+
+Use official baseline values.
+
+Allow scenario inputs such as:
+
+- Availability improvement
+- Cancellation reduction
+- Repeat purchase improvement
+- Support ticket reduction
+
+Calculate outputs dynamically.
+
+IMPORTANT:
+
+Every output must be labelled:
+
+"Scenario"
+
+or
+
+"Illustrative projection"
+
+or
+
+"Potential impact"
+
+Never claim these are achieved results.
+
+Do not invent historical NOVA CART improvements.
+
+---
+
+# 29. PROMPT JOURNEY
+
+Create:
+
+/prompt-journey
+
+Show:
+
+DISCOVER
+→
+PROMPT
+→
+VALIDATE
+→
+DESIGN
+→
+BUILD
+→
+PROVE
+
+For each stage include:
+
+Question
+Evidence
+Prompt/Approach
+Insight
+Decision
+
+Explain how AI/prompt engineering contributed to the investigation and product design.
+
+---
+
+# 30. SOLUTION PAGE
+
+Create:
+
+/solution
+
+Explain:
+
+Problem
+Evidence
+Root opportunity
+NOVA PULSE
+Architecture
+Users
+Workflow
+Business value
+Constraints
+Implementation
+
+Use diagrams/cards/flows.
+
+---
+
+# 31. DEMO CENTER
+
+Create:
+
+/demo
+
+This page is extremely important.
+
+Create buttons:
+
+Customer Demo
+Store Demo
+Admin Demo
+Inventory Risk Demo
+Alternative Recommendation Demo
+Impact Simulator
+
+Also include:
+
+"Reset Demo Data"
+
+The entire demo must be repeatable.
+
+---
+
+# 32. CRITICAL JUDGE DEMO
+
+The application MUST support this deterministic demo.
+
+## Step 1 — Customer
+
+Login:
+
+customer@nova.test
+demo123
+
+Open Milk.
+
+Initial state:
+
+Milk
+Availability Confidence: 42%
+Status: Low Availability
+
+Show warning.
+
+Show recommended alternative:
+
+Alternative Milk
+Availability Confidence: 94%
+
+Accept alternative.
+
+Add to cart.
+
+---
+
+## Step 2 — Checkout Risk
+
+Open checkout.
+
+Run:
+
+Check Order Risk
+
+Backend should detect:
+
+Milk risk / availability issue.
+
+If alternative is selected, risk should reduce.
+
+---
+
+## Step 3 — Store
+
+Logout.
+
+Login:
+
+store@nova.test
+demo123
+
+Open inventory.
+
+Find Bread.
+
+Initial confidence:
+
+approximately 48%.
+
+Update stock.
+
+Example:
+
+Stock:
+12 units
+
+Save.
+
+Backend recalculates confidence.
+
+Target seeded demo result:
+
+91%+
+
+Do NOT fake the number with a frontend animation.
+
+---
+
+## Step 4 — Customer Again
+
+Return to customer.
+
+Open Bread.
+
+The updated confidence must now reflect the backend/database change.
+
+Show:
+
+Before:
+48%
+
+After:
+91%+
+
+---
+
+## Step 5 — Admin
+
+Login:
+
+admin@nova.test
+demo123
+
+Admin should see:
+
+- Bread confidence changed
+- Inventory update
+- Reduced risk
+- Relevant operational alert change
+
+This proves:
+
+CUSTOMER
+↕
+BACKEND
+↕
+STORE
+↕
+DATABASE
+↕
+ADMIN
+
+---
+
+# 33. DATABASE
+
+Create real tables/models for at least:
+
+users
+roles
+stores
+products
+inventory
+inventory_events
+orders
+order_items
+order_status_history
+availability_signals
+recommendations
+alerts
+search_events
+support_tickets
+demo_state
+
+Seed realistic demo data.
+
+Make relationships correct.
+
+Use migrations or automatic initialization.
+
+---
+
+# 34. API REQUIREMENTS
+
+Implement real API endpoints.
+
+Examples:
+
+POST /api/auth/login
+
+GET /api/products
+
+GET /api/products/{id}
+
+GET /api/search
+
+GET /api/products/{id}/alternatives
+
+GET /api/products/{id}/availability
+
+POST /api/orders/check-risk
+
+POST /api/orders
+
+GET /api/orders/{id}
+
+GET /api/orders
+
+GET /api/store/inventory
+
+PATCH /api/store/inventory/{id}
+
+GET /api/store/orders
+
+PATCH /api/store/orders/{id}
+
+GET /api/store/alerts
+
+GET /api/admin/dashboard
+
+GET /api/admin/inventory-risk
+
+GET /api/admin/alerts
+
+PATCH /api/admin/alerts/{id}
+
+GET /api/admin/demand
+
+GET /api/admin/impact
+
+POST /api/demo/reset
+
+Adapt endpoint names if necessary, but preserve equivalent functionality.
+
+---
+
+# 35. AUTHENTICATION
+
+Implement JWT authentication.
+
+Role-based authorization:
+
+CUSTOMER
+STORE
+ADMIN
+
+Users must not access pages belonging to another role.
+
+Protect backend APIs as well.
+
+Do not rely only on hiding frontend navigation.
+
+---
+
+# 36. DEMO ACCOUNTS
+
+Seed:
+
+Customer:
+
+customer@nova.test
+demo123
+
+Store:
+
+store@nova.test
+demo123
+
+Admin:
+
+admin@nova.test
+demo123
+
+Clearly mark these as demo credentials in README and demo page.
+
+---
+
+# 37. ERROR HANDLING
+
+Implement:
+
+- API errors
+- Validation errors
+- Unauthorized access
+- Missing records
+- Database failures
+- Empty states
+- Network errors
+
+Never show raw stack traces to users.
+
+Use friendly error messages.
+
+---
+
+# 38. LOADING STATES
+
+Every API-driven page should have:
+
+- Skeleton loader or spinner
+- Disabled button during submission
+- Success feedback
+- Error feedback
+
+No frozen UI.
+
+---
+
+# 39. RESPONSIVE DESIGN
+
+Test:
+
+Desktop
+Laptop
+Tablet
+Mobile
+
+Fix:
+
+- Horizontal overflow
+- Broken grids
+- Tiny text
+- Overlapping cards
+- Broken navigation
+- Chart overflow
+
+Customer interface should feel mobile-first.
+
+Admin/store interface should work especially well on desktop/tablet.
+
+---
+
+# 40. ACCESSIBILITY
+
+Implement reasonable accessibility:
+
+- Semantic HTML
+- Labels for inputs
+- Keyboard navigation
+- Visible focus states
+- Good contrast
+- Accessible buttons
+- Meaningful alt text
+- Avoid colour-only status communication
+
+---
+
+# 41. SECURITY
+
+Implement:
+
+- Password hashing
+- JWT validation
+- Role checks
+- Input validation
+- Environment variables
+- No exposed secrets
+- Basic API validation
+- Safe database queries
+
+Do not expose passwords in API responses.
+
+---
+
+# 42. NO FAKE FUNCTIONALITY
+
+CRITICAL.
+
+Do NOT create buttons that do nothing.
+
+Do NOT use fake alerts.
+
+Do NOT show fake loading animations instead of actual API calls.
+
+Do NOT make fake charts claiming real data.
+
+Do NOT use static frontend values where backend state should be used.
+
+If an action appears interactive, make it functional.
+
+If a feature is not implemented, remove it or clearly label it as a future concept.
+
+---
+
+# 43. BUSINESS DATA INTEGRITY
+
+Use the official challenge document as the source for NOVA CART baseline metrics.
+
+Do not silently change:
+
+- User counts
+- Orders
+- Revenue
+- AOV
+- Repeat rate
+- Cancellation rate
+- Delivery time
+- Support volume
+- Marketing spend
+
+When creating prototype scenarios, clearly label them as:
+
+Scenario
+Projection
+Illustrative
+Potential
+
+Never call scenario results actual NOVA CART results.
+
+---
+
+# 44. PERFORMANCE
+
+Keep the app responsive.
+
+Avoid unnecessary API requests.
+
+Use efficient database queries.
+
+Use reusable components.
+
+Avoid huge bundles where possible.
+
+Optimize images.
+
+---
+
+# 45. TESTING
+
+Create backend tests for:
+
+- Authentication
+- Role access
+- Product retrieval
+- Availability calculation
+- Alternative recommendation
+- Inventory update
+- Order risk
+- Order creation
+- Alert creation
+- Admin metrics
+
+Test the critical demo path.
+
+---
+
+# 46. SMOKE TEST
+
+Before saying the project is complete, actually test:
+
+1. Start backend
+2. Start frontend
+3. Login as customer
+4. Search Milk
+5. View 42% confidence
+6. See alternative
+7. Add to cart
+8. Check order risk
+9. Login as store
+10. Update Bread
+11. Verify database changed
+12. Verify Bread confidence becomes 91%+
+13. Login as admin
+14. Verify update appears
+15. Reset demo
+16. Repeat
+
+Fix every runtime error you encounter.
+
+---
+
+# 47. REPLIT CONFIGURATION
+
+The project must run correctly inside Replit.
+
+Configure:
+
+.replit
+
+If needed:
+
+replit.nix
+
+Configure the Run command appropriately.
+
+Prefer a single Run action that starts the application.
+
+If frontend and backend require separate processes, configure them properly so the judge can start the project easily.
+
+Do not leave setup dependent on hidden local-machine configuration.
+
+---
+
+# 48. README
+
+Create a professional README containing:
+
+Project name
+Problem
+Business diagnosis
+Solution
+Features
+Architecture
+Tech stack
+Database
+API
+Setup instructions
+Environment variables
+Demo accounts
+Demo walkthrough
+Testing
+Business impact methodology
+Known limitations
+Future improvements
+
+Include exact commands required to run the project.
+
+---
+
+# 49. JUDGE-FRIENDLY NAVIGATION
+
+Create a clear top-level navigation.
+
+Recommended:
+
+Customer
+Store
+Operations
+Business Case
+Diagnosis
+NOVA Pulse
+Impact
+Prompt Journey
+Solution
+Demo Center
+
+Use role-aware navigation.
+
+Make Demo Center easy to find.
+
+---
+
+# 50. VISUAL STORYTELLING
+
+The UI must communicate the business story without requiring the judge to read everything.
+
+Within approximately 30 seconds, the judge should understand:
+
+NOVA CART has a local-store availability problem.
+
+NOVA PULSE measures availability confidence.
+
+Customers get safer product choices.
+
+Stores get simple inventory actions.
+
+Operations gets network visibility.
+
+The system connects all three.
+
+---
+
+# 51. PRODUCT LANGUAGE
+
+Use clear product language.
+
+Prefer:
+
+"Availability confidence"
+
+"Inventory freshness"
+
+"Order risk"
+
+"Smart alternative"
+
+"Inventory update"
+
+"Store reliability"
+
+"Demand signal"
+
+"Operational alert"
+
+Avoid excessive technical jargon in customer-facing UI.
+
+---
+
+# 52. VISUAL STATUS SYSTEM
+
+Use consistent status treatment.
+
+Highly Available:
+Green
+
+Likely Available:
+Positive/neutral
+
+Uncertain:
+Amber
+
+Low Availability:
+Red
+
+Do not communicate status using colour alone.
+
+Also show text labels.
+
+---
+
+# 53. EMPTY STATES
+
+Create useful empty states.
+
+Examples:
+
+"No high-risk products right now."
+
+"No active operational alerts."
+
+"No pending inventory updates."
+
+"No orders yet."
+
+Do not leave blank screens.
+
+---
+
+# 54. DEMO RESET
+
+The "Reset Demo Data" button must:
+
+- Restore Milk to 42%
+- Restore Bread to approximately 48%
+- Restore demo orders
+- Restore demo alerts
+- Restore inventory events
+- Restore demo state
+
+It must actually modify backend/database state.
+
+---
+
+# 55. FINAL QUALITY STANDARD
+
+Before declaring completion, ask yourself:
+
+Can a judge run this?
+
+Can a judge understand this?
+
+Can a judge click through the core journey?
+
+Can a judge see the business problem?
+
+Can a judge see why NOVA PULSE solves it?
+
+Can a judge see customer value?
+
+Can a judge see store value?
+
+Can a judge see operations value?
+
+Can a judge see actual backend/database interaction?
+
+Can the demo be repeated?
+
+If any answer is NO, continue building and fixing.
+
+---
+
+# 56. IMPORTANT FINAL INSTRUCTION TO REPLIT AGENT
+
+DO NOT STOP AFTER GENERATING FILES.
+
+Actually:
+
+1. Build the project.
+2. Install dependencies.
+3. Configure the database.
+4. Seed data.
+5. Start the application.
+6. Test APIs.
+7. Test frontend.
+8. Fix errors.
+9. Test authentication.
+10. Test all three roles.
+11. Test the critical Milk/Bread demo.
+12. Test responsive UI.
+13. Test the Demo Center.
+14. Verify the README.
+15. Only then consider the project complete.
+
+If something fails, debug it and fix it.
+
+Do not simply tell me how I could fix it.
+
+You are responsible for producing the working prototype.
+
+---
+
+# 57. FINAL DELIVERABLE
+
+The final Replit project must contain:
+
+✓ Polished UI/UX  
+✓ Responsive web application  
+✓ Customer experience  
+✓ Store Partner experience  
+✓ Operations/Admin experience  
+✓ Real backend  
+✓ Real database  
+✓ Authentication  
+✓ Role-based access  
+✓ Availability confidence engine  
+✓ Smart alternatives  
+✓ Order-risk checking  
+✓ Real inventory updates  
+✓ Real order workflow  
+✓ Operational alerts  
+✓ Demand signals  
+✓ Business dashboard  
+✓ Business Case  
+✓ Diagnosis  
+✓ NOVA PULSE explanation  
+✓ Impact simulator  
+✓ Prompt Journey  
+✓ Solution page  
+✓ Demo Center  
+✓ Demo reset  
+✓ Seed data  
+✓ Tests  
+✓ README  
+✓ Replit configuration  
+
+The final product should feel like a coherent, real startup product rather than a collection of generated pages.
+
+Build NOVA PULSE as a **functional business rescue prototype**, not merely a UI mockup.
+
+START BUILDING NOW.

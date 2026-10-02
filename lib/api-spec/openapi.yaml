@@ -3,20 +3,23 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: NOVA PULSE inventory confidence and fulfillment API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
-    description: Health operations
+  - name: auth
+  - name: customer
+  - name: store
+  - name: admin
+  - name: demo
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +27,697 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Sign in with a demo account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Signed in; sets a secure session cookie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+        "401":
+          description: Invalid credentials
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: End the current session
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Signed out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      tags: [auth]
+      summary: Get the signed-in user
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /products:
+    get:
+      operationId: listProducts
+      tags: [customer]
+      summary: Search local-store products
+      parameters:
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: category
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Matching products with computed availability
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+  /products/{productId}:
+    get:
+      operationId: getProduct
+      tags: [customer]
+      summary: Get a product and its availability signals
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Product detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+  /products/{productId}/alternatives:
+    get:
+      operationId: getProductAlternatives
+      tags: [customer]
+      summary: Recommend in-stock alternatives from local stores
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Ranked alternatives
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+  /orders/check-risk:
+    post:
+      operationId: checkOrderRisk
+      tags: [customer]
+      summary: Recalculate order risk before checkout
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderRiskInput"
+      responses:
+        "200":
+          description: Current risk assessment and relevant alternatives
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderRisk"
+  /orders:
+    get:
+      operationId: listOrders
+      tags: [customer, store]
+      summary: List orders visible to the current role
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    post:
+      operationId: createOrder
+      tags: [customer]
+      summary: Place a new order after risk review
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrderInput"
+      responses:
+        "201":
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  /orders/{orderId}:
+    get:
+      operationId: getOrder
+      tags: [customer, store]
+      summary: Get an order and its status history
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: Order not found
+  /store/dashboard:
+    get:
+      operationId: getStoreDashboard
+      tags: [store]
+      summary: Store partner operating snapshot
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Store metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StoreDashboard"
+  /store/inventory:
+    get:
+      operationId: listStoreInventory
+      tags: [store]
+      summary: List the current store's inventory
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Inventory
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InventoryItem"
+  /store/inventory/{inventoryId}:
+    patch:
+      operationId: updateStoreInventory
+      tags: [store]
+      summary: Update stock and recalculate confidence
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: inventoryId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InventoryUpdateInput"
+      responses:
+        "200":
+          description: Updated inventory and computed confidence
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventoryItem"
+  /store/alerts:
+    get:
+      operationId: listStoreAlerts
+      tags: [store]
+      summary: List active alerts for the current store
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Store alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alert"
+  /store/orders:
+    get:
+      operationId: listStoreOrders
+      tags: [store]
+      summary: List orders routed to the current store
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Store order queue
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+  /store/orders/{orderId}:
+    patch:
+      operationId: updateStoreOrderStatus
+      tags: [store]
+      summary: Advance a store order through fulfillment
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderStatusUpdateInput"
+      responses:
+        "200":
+          description: Updated order visible to customer and store
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  /admin/dashboard:
+    get:
+      operationId: getAdminDashboard
+      tags: [admin]
+      summary: Operations overview with official challenge baselines
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Business snapshot and operational risk
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminDashboard"
+  /admin/inventory-risk:
+    get:
+      operationId: listInventoryRisk
+      tags: [admin]
+      summary: Inventory risk across the store network
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: filter
+          in: query
+          schema:
+            type: string
+            enum: [all, high, uncertain, recently-failed, low-confidence]
+      responses:
+        "200":
+          description: Risk-ranked inventory items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InventoryRisk"
+  /admin/alerts:
+    get:
+      operationId: listAdminAlerts
+      tags: [admin]
+      summary: List operational alerts across stores
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Network alerts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alert"
+  /admin/alerts/{alertId}:
+    patch:
+      operationId: updateAdminAlert
+      tags: [admin]
+      summary: Acknowledge or resolve an operational alert
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlertUpdateInput"
+      responses:
+        "200":
+          description: Updated alert
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Alert"
+  /admin/demand:
+    get:
+      operationId: getDemandSignals
+      tags: [admin]
+      summary: Search activity for frequently unavailable products
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Demand signals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DemandSignal"
+  /admin/impact:
+    post:
+      operationId: simulateImpact
+      tags: [admin]
+      summary: Calculate an illustrative business impact scenario
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImpactScenarioInput"
+      responses:
+        "200":
+          description: Scenario projections, not achieved results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImpactProjection"
+  /demo/reset:
+    post:
+      operationId: resetDemo
+      tags: [demo]
+      summary: Restore deterministic judge demo data
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Demo state restored
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
 components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: nova_session
   schemas:
     HealthStatus:
       type: object
       properties:
-        status:
-          type: string
-      required:
-        - status
-
+        status: { type: string }
+      required: [status]
+    Message:
+      type: object
+      properties:
+        message: { type: string }
+      required: [message]
+    LoginInput:
+      type: object
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 1 }
+      required: [email, password]
+    User:
+      type: object
+      properties:
+        id: { type: string }
+        email: { type: string }
+        name: { type: string }
+        role: { type: string, enum: [CUSTOMER, STORE, ADMIN] }
+        storeName: { type: ["string", "null"] }
+      required: [id, email, name, role, storeName]
+    Session:
+      type: object
+      properties:
+        user: { $ref: "#/components/schemas/User" }
+      required: [user]
+    Product:
+      type: object
+      properties:
+        id: { type: string }
+        inventoryId: { type: string }
+        name: { type: string }
+        category: { type: string }
+        description: { type: string }
+        price: { type: number }
+        unit: { type: string }
+        storeId: { type: string }
+        storeName: { type: string }
+        storeDistanceKm: { type: number }
+        storeReliability: { type: number }
+        stock: { type: integer }
+        confidence: { type: integer }
+        availabilityLabel: { type: string }
+        lastUpdated: { type: string, format: date-time }
+        deliveryMinutes: { type: integer }
+        image: { type: string }
+      required: [id, inventoryId, name, category, description, price, unit, storeId, storeName, storeDistanceKm, storeReliability, stock, confidence, availabilityLabel, lastUpdated, deliveryMinutes, image]
+    OrderRiskInput:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemInput"
+      required: [items]
+    OrderItemInput:
+      type: object
+      properties:
+        productId: { type: string }
+        quantity: { type: integer, minimum: 1 }
+      required: [productId, quantity]
+    OrderRisk:
+      type: object
+      properties:
+        level: { type: string, enum: [LOW, MEDIUM, HIGH] }
+        score: { type: integer }
+        reasons:
+          type: array
+          items: { type: string }
+        alternatives:
+          type: array
+          items:
+            $ref: "#/components/schemas/AlternativeForRisk"
+      required: [level, score, reasons, alternatives]
+    AlternativeForRisk:
+      type: object
+      properties:
+        productId: { type: string }
+        productName: { type: string }
+        confidence: { type: integer }
+        price: { type: number }
+      required: [productId, productName, confidence, price]
+    CreateOrderInput:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemInput"
+        address: { type: string, minLength: 3 }
+        paymentMethod: { type: string, enum: [UPI, CARD, CASH] }
+      required: [items, address, paymentMethod]
+    OrderLine:
+      type: object
+      properties:
+        productId: { type: string }
+        productName: { type: string }
+        quantity: { type: integer }
+        price: { type: number }
+        confidenceAtOrder: { type: integer }
+        storeName: { type: string }
+      required: [productId, productName, quantity, price, confidenceAtOrder, storeName]
+    Order:
+      type: object
+      properties:
+        id: { type: string }
+        customerName: { type: string }
+        customerEmail: { type: string }
+        storeId: { type: string }
+        storeName: { type: string }
+        status: { type: string, enum: [PLACED, STORE_CONFIRMED, PREPARING, READY, OUT_FOR_DELIVERY, DELIVERED, CANCELLED, REFUND_PENDING, REFUNDED] }
+        total: { type: number }
+        address: { type: string }
+        paymentMethod: { type: string }
+        riskScore: { type: integer }
+        createdAt: { type: string, format: date-time }
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/OrderLine" }
+        history:
+          type: array
+          items: { $ref: "#/components/schemas/OrderStatusEvent" }
+      required: [id, customerName, customerEmail, storeId, storeName, status, total, address, paymentMethod, riskScore, createdAt, items, history]
+    OrderStatusUpdateInput:
+      type: object
+      properties:
+        status: { type: string, enum: [STORE_CONFIRMED, PREPARING, READY, OUT_FOR_DELIVERY, DELIVERED] }
+      required: [status]
+    OrderStatusEvent:
+      type: object
+      properties:
+        status: { type: string }
+        note: { type: string }
+        createdAt: { type: string, format: date-time }
+      required: [status, note, createdAt]
+    InventoryItem:
+      type: object
+      properties:
+        id: { type: string }
+        productId: { type: string }
+        productName: { type: string }
+        category: { type: string }
+        price: { type: number }
+        unit: { type: string }
+        stock: { type: integer }
+        confidence: { type: integer }
+        availabilityLabel: { type: string }
+        lastUpdated: { type: string, format: date-time }
+        recentFailures: { type: integer }
+        risk: { type: string, enum: [HIGH, MEDIUM, LOW] }
+      required: [id, productId, productName, category, price, unit, stock, confidence, availabilityLabel, lastUpdated, recentFailures, risk]
+    InventoryUpdateInput:
+      type: object
+      properties:
+        stock: { type: integer, minimum: 0 }
+        available: { type: boolean }
+      required: [stock, available]
+    Alert:
+      type: object
+      properties:
+        id: { type: string }
+        severity: { type: string, enum: [HIGH, MEDIUM, LOW] }
+        type: { type: string }
+        storeId: { type: string }
+        storeName: { type: string }
+        productName: { type: string }
+        reason: { type: string }
+        recommendedAction: { type: string }
+        status: { type: string, enum: [OPEN, ACKNOWLEDGED, RESOLVED] }
+        createdAt: { type: string, format: date-time }
+      required: [id, severity, type, storeId, storeName, productName, reason, recommendedAction, status, createdAt]
+    AlertUpdateInput:
+      type: object
+      properties:
+        status: { type: string, enum: [ACKNOWLEDGED, RESOLVED] }
+      required: [status]
+    StoreDashboard:
+      type: object
+      properties:
+        storeName: { type: string }
+        todaysOrders: { type: integer }
+        pendingOrders: { type: integer }
+        lowConfidenceCount: { type: integer }
+        updatesNeeded: { type: integer }
+        operationalScore: { type: integer }
+      required: [storeName, todaysOrders, pendingOrders, lowConfidenceCount, updatesNeeded, operationalScore]
+    InventoryRisk:
+      type: object
+      properties:
+        inventoryId: { type: string }
+        productId: { type: string }
+        productName: { type: string }
+        storeId: { type: string }
+        storeName: { type: string }
+        confidence: { type: integer }
+        risk: { type: string, enum: [HIGH, MEDIUM, LOW] }
+        lastUpdated: { type: string, format: date-time }
+        recentFailures: { type: integer }
+        frequentSearches: { type: integer }
+      required: [inventoryId, productId, productName, storeId, storeName, confidence, risk, lastUpdated, recentFailures, frequentSearches]
+    AdminDashboard:
+      type: object
+      properties:
+        registeredUsers: { type: integer }
+        monthlyActiveUsers: { type: integer }
+        monthlyOrders: { type: integer }
+        averageOrderValue: { type: number }
+        monthlyRevenueLakh: { type: number }
+        repeatPurchaseRate: { type: number }
+        cancellationRate: { type: number }
+        averageDeliveryMinutes: { type: integer }
+        supportTickets: { type: integer }
+        highRiskProducts: { type: integer }
+        atRiskOrders: { type: integer }
+        storesRequiringAttention: { type: integer }
+        sixMonthTrend:
+          type: array
+          items: { $ref: "#/components/schemas/TrendPoint" }
+      required: [registeredUsers, monthlyActiveUsers, monthlyOrders, averageOrderValue, monthlyRevenueLakh, repeatPurchaseRate, cancellationRate, averageDeliveryMinutes, supportTickets, highRiskProducts, atRiskOrders, storesRequiringAttention, sixMonthTrend]
+    TrendPoint:
+      type: object
+      properties:
+        month: { type: string }
+        orders: { type: integer }
+        repeatRate: { type: number }
+        cancellations: { type: number }
+        revenueLakh: { type: number }
+      required: [month, orders, repeatRate, cancellations, revenueLakh]
+    DemandSignal:
+      type: object
+      properties:
+        productName: { type: string }
+        category: { type: string }
+        searchesPerWeek: { type: integer }
+        availabilityRate: { type: number }
+        storeCoverage: { type: integer }
+        opportunity: { type: string }
+      required: [productName, category, searchesPerWeek, availabilityRate, storeCoverage, opportunity]
+    ImpactScenarioInput:
+      type: object
+      properties:
+        availabilityImprovement: { type: number, minimum: 0, maximum: 30 }
+        cancellationReduction: { type: number, minimum: 0, maximum: 10 }
+        repeatRateImprovement: { type: number, minimum: 0, maximum: 20 }
+        supportTicketReduction: { type: number, minimum: 0, maximum: 50 }
+      required: [availabilityImprovement, cancellationReduction, repeatRateImprovement, supportTicketReduction]
+    ImpactProjection:
+      type: object
+      properties:
+        label: { type: string, enum: [Illustrative projection] }
+        cancellationRate: { type: number }
+        repeatPurchaseRate: { type: number }
+        monthlyOrdersProtected: { type: integer }
+        supportTicketsAvoided: { type: integer }
+        incrementalRevenueLakh: { type: number }
+        implementationBudgetLakh: { type: number }
+        methodology:
+          type: array
+          items: { type: string }
+      required: [label, cancellationRate, repeatPurchaseRate, monthlyOrdersProtected, supportTicketsAvoided, incrementalRevenueLakh, implementationBudgetLakh, methodology]
+security: []

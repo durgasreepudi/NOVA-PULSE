@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "NOVA PULSE"
+description = "A local-commerce availability intelligence platform for NOVA CART. Customers shop with confidence, store partners quickly update inventory, and operations teams monitor fulfillment risk through shared live data."
+version = "1.0.0"
+id = "artifacts/nova-pulse"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25497
+
+[services.development]
+run = "pnpm --filter @workspace/nova-pulse run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/nova-pulse", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/nova-pulse/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25497"
+BASE_PATH = "/"
