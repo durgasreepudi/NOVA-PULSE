@@ -1,0 +1,595 @@
+NOVA PULSE – CUSTOMER SHOPPING UI UPGRADE
+
+IMPORTANT:
+Do NOT rebuild the application.
+Do NOT change the existing backend, database schema, API contracts, authentication, store partner workflows, operations workflows, inventory logic, availability-confidence calculations, or demo data.
+
+Keep everything that currently works.
+
+TASK:
+Upgrade ONLY the CUSTOMER / SHOPPER experience so it looks and behaves like a polished real-world local-commerce shopping app, while keeping NOVA PULSE availability intelligence as the unique differentiator.
+
+The customer side should feel like a normal shopping app first, and NOVA PULSE intelligence should appear naturally inside the shopping experience.
+
+==================================================
+1. CUSTOMER HOME PAGE
+==================================================
+
+Replace the current overly conceptual hero section with a realistic shopping homepage.
+
+Header:
+- NOVA PULSE logo
+- Location selector
+- Cart icon with item count
+- User/profile icon
+
+Location:
+"Delivering to Demo City A"
+with a location pin icon.
+
+Search:
+Large search bar:
+"Search for milk, bread, fruits, groceries..."
+
+Category section:
+Create horizontal category chips/cards:
+
+- Grocery
+- Dairy & Eggs
+- Fruits & Vegetables
+- Bakery
+- Snacks
+- Beverages
+- Pharmacy
+- Stationery
+
+Remember:
+NOVA CART is NOT grocery-only.
+Keep Pharmacy and Stationery visible so the product clearly represents local commerce.
+
+Add a small promotional banner:
+"Shop local. Know what's available."
+Subtitle:
+"Find nearby products with clearer availability signals."
+
+==================================================
+2. REAL PRODUCT IMAGES
+==================================================
+
+THIS IS IMPORTANT.
+
+The current product cards use abstract/placeholder visuals.
+Replace them with REAL PRODUCT PHOTOGRAPHY.
+
+Use reliable publicly accessible image URLs or royalty-free product image sources.
+
+Do NOT use random unrelated images.
+
+Every product must have an appropriate image matching the product.
+
+Use these demo products:
+
+1. Fresh Toned Milk
+Image: real milk packet/bottle
+Price: ₹32
+Pack: 500 ml
+
+2. Whole Wheat Bread
+Image: real packaged bread loaf
+Price: ₹48
+Pack: 400 g
+
+3. Farm Eggs
+Image: real egg carton
+Price: ₹78
+Pack: 6 eggs
+
+4. Robusta Bananas
+Image: real bananas
+Price: ₹42
+Pack: 500 g
+
+5. Local Tomatoes
+Image: real tomatoes
+Price: ₹36
+Pack: 500 g
+
+6. Everyday Sona Masoori Rice
+Image: real rice packet
+Price: ₹68
+Pack: 1 kg
+
+7. Fresh Paneer
+Image: real paneer packet
+Price: ₹92
+Pack: 200 g
+
+8. Alternative Milk
+Image: real milk packet/bottle
+Price: ₹34
+Pack: 500 ml
+
+Images must:
+- be high quality
+- maintain aspect ratio
+- have consistent card dimensions
+- use object-fit: contain
+- have a clean/light background where possible
+- never stretch or distort
+- have graceful fallback if an image fails
+
+IMPORTANT:
+Do not use emoji as product images.
+Do not use colored placeholder blocks.
+Do not generate fake SVG product illustrations.
+
+If external image URLs are unreliable, download/store suitable royalty-free images in the project's public/assets/products directory and reference them locally.
+
+Create:
+public/assets/products/
+
+Example:
+public/assets/products/milk.jpg
+public/assets/products/bread.jpg
+public/assets/products/eggs.jpg
+public/assets/products/bananas.jpg
+public/assets/products/tomatoes.jpg
+public/assets/products/rice.jpg
+public/assets/products/paneer.jpg
+
+==================================================
+3. PRODUCT CARD DESIGN
+==================================================
+
+Make product cards look like a real e-commerce/local-commerce app.
+
+Each card should contain:
+
+[REAL PRODUCT IMAGE]
+
+Product name
+Pack size
+
+₹ Price
+
+Store name
+Distance
+
+Availability confidence badge
+
+Examples:
+
+Fresh Toned Milk
+500 ml
+₹32
+
+Green Basket Market
+0.8 km
+
+42% Available
+Low availability
+
+[Add]
+
+Another:
+
+Farm Eggs
+6 pack
+₹78
+
+Green Basket Market
+0.8 km
+
+91% Available
+Highly available
+
+[Add]
+
+Keep the availability confidence visible, because this is NOVA PULSE's core innovation.
+
+However:
+Do NOT make the entire card look like an analytics dashboard.
+
+The customer should understand:
+"This is a shopping app."
+
+==================================================
+4. AVAILABILITY UX
+==================================================
+
+Keep the current real availability values and backend logic.
+
+Use:
+
+90–100%
+Highly Available
+
+75–89%
+Likely Available
+
+50–74%
+Uncertain
+
+0–49%
+Low Availability
+
+Make these visually clear but subtle.
+
+For low-confidence products:
+
+"Low availability"
+"Try an alternative"
+
+For example:
+
+Fresh Toned Milk
+₹32
+42% availability
+
+[Try alternative]
+
+Alternative Milk
+₹34
+93% availability
+
+[Add]
+
+This should be one of the strongest NOVA PULSE demo moments.
+
+==================================================
+5. PRODUCT DETAIL PAGE
+==================================================
+
+When customer clicks a product, create/improve a proper product detail page.
+
+Layout:
+
+Large real product image
+
+Product name
+Brand/store
+Price
+Pack size
+Rating
+
+Availability section:
+
+"Availability confidence"
+42%
+
+"Last stock signal: recently updated"
+
+Then:
+
+"Why this matters"
+"Local store inventory can change quickly. NOVA PULSE uses recent inventory signals to show a clearer availability estimate."
+
+If confidence is low:
+
+"⚠️ This item may be unavailable."
+
+Show:
+
+"Better available nearby"
+
+Alternative product card
+
+[Add to Cart]
+
+Quantity selector:
+
+[-] 1 [+]
+
+[Add to Cart]
+
+==================================================
+6. NORMAL SHOPPING FEATURES
+==================================================
+
+Add/improve:
+
+- Add to Cart
+- Quantity +/- controls
+- Cart badge
+- Product search
+- Category filtering
+- Store information
+- Distance
+- Delivery estimate
+- Ratings
+- Offers
+- Recently viewed
+- Recommended products
+
+Do not overcomplicate the UI.
+
+==================================================
+7. CART
+==================================================
+
+Make cart look like a normal modern shopping cart.
+
+Show:
+
+Product image
+Product name
+Pack size
+Price
+Quantity controls
+Remove
+
+Order summary:
+
+Subtotal
+Delivery fee
+Discount
+Total
+
+Before checkout, add a small NOVA PULSE check:
+
+"Availability check"
+
+Example:
+
+✓ 2 items highly available
+⚠ 1 item has lower availability
+
+For low-confidence item:
+
+"Whole wheat bread – 48%"
+"Try Alternative"
+
+Do NOT automatically remove the product.
+
+Let the customer choose.
+
+==================================================
+8. CHECKOUT
+==================================================
+
+Create a simple normal checkout:
+
+Delivery address
+Order items
+Payment method
+Price breakdown
+
+Before placing order:
+
+"Final availability check"
+
+Then:
+
+"Place Order"
+
+Keep the existing backend order functionality.
+
+==================================================
+9. BOTTOM NAVIGATION
+==================================================
+
+Add a clean customer navigation:
+
+Home
+Categories
+Orders
+Cart
+Profile
+
+Use Lucide icons.
+
+On desktop, this can become a compact navigation/sidebar if appropriate.
+
+On mobile, use a fixed bottom navigation bar.
+
+==================================================
+10. CUSTOMER ORDERS
+==================================================
+
+Make customer order history look like a normal shopping app.
+
+Show:
+
+Order ID
+Date
+Products
+Total
+Store
+Status
+
+Example:
+
+Order #ORDER-001
+2 × Whole Wheat Bread
+1 × Farm Eggs
+
+₹174
+
+Green Basket Market
+
+Preparing → Out for delivery → Delivered
+
+==================================================
+11. DESIGN
+==================================================
+
+Keep NOVA PULSE branding.
+
+Primary:
+deep green
+
+Accent:
+warm yellow/orange for NOVA PULSE lightning icon
+
+Background:
+clean warm/off-white
+
+Cards:
+white
+
+Typography:
+modern, clean, readable
+
+Use:
+rounded cards
+subtle shadows
+clean spacing
+real product imagery
+clear CTAs
+
+Do not make it look like an admin dashboard.
+
+The CUSTOMER side should visually resemble a polished local-commerce shopping application.
+
+==================================================
+12. IMPORTANT BUSINESS POSITIONING
+==================================================
+
+Do NOT call this a "grocery-only app".
+
+NOVA CART is a local-commerce platform connecting customers with:
+
+- Grocery stores
+- Pharmacies
+- Bakeries
+- Stationery stores
+- Other local retailers
+
+Grocery products can be the main demo category because they clearly demonstrate the availability problem.
+
+Use this customer-facing positioning:
+
+"Local shopping, with availability you can trust."
+
+or:
+
+"Find it nearby. Trust it's available."
+
+==================================================
+13. DEMO FLOW MUST STILL WORK
+==================================================
+
+After the UI upgrade, test this exact flow:
+
+CUSTOMER:
+Login as:
+customer@nova.test
+password:
+demo123
+
+Search:
+Milk
+
+Show:
+
+Fresh Toned Milk
+₹32
+42%
+Low availability
+
+Then show:
+
+Alternative Milk
+₹34
+93%
+Highly available
+
+Add alternative to cart.
+
+Then logout.
+
+STORE:
+Login:
+store@nova.test
+demo123
+
+Go to Inventory.
+
+Update the relevant stock quantity.
+
+Save.
+
+Verify the availability confidence changes.
+
+CUSTOMER:
+Login again.
+
+Verify the updated availability is reflected.
+
+OPERATIONS:
+Login:
+admin@nova.test
+demo123
+
+Verify the inventory/order signal is visible.
+
+IMPORTANT:
+The customer → store → customer → operations loop must remain functional.
+
+==================================================
+14. RESPONSIVENESS
+==================================================
+
+The customer UI must work properly on:
+
+Desktop
+Tablet
+Mobile
+
+Do not allow:
+- overflowing cards
+- broken images
+- horizontal page overflow
+- clipped text
+- broken navigation
+- stretched product images
+
+==================================================
+15. DO NOT BREAK EXISTING FEATURES
+==================================================
+
+Do NOT modify:
+
+Store dashboard
+Store inventory
+Store orders
+Operations dashboard
+Authentication
+Availability engine
+Database
+API endpoints
+Order workflow
+Demo reset
+Role-based access
+
+unless absolutely necessary for the customer UI integration.
+
+After implementation:
+- run TypeScript checks
+- run backend tests
+- run frontend build
+- verify all routes
+- verify login for all 3 roles
+- verify product images
+- verify cart
+- verify order flow
+- verify inventory update changes customer confidence
+
+FINAL RESULT:
+
+The application should visually communicate:
+
+NORMAL LOCAL-COMMERCE SHOPPING APP
++
+REAL PRODUCT IMAGES
++
+NORMAL CART/CHECKOUT
++
+NOVA PULSE AVAILABILITY INTELLIGENCE
++
+STORE INVENTORY ACTION
++
+OPERATIONS VISIBILITY
+
+Do not replace the existing NOVA PULSE concept.
+Improve the customer experience around it.
